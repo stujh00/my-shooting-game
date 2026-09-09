@@ -161,7 +161,7 @@
     <div class="summary" id="summary"></div>
     <div class="log-scroll">
       <table>
-        <thead><tr><th>#</th><th>난이도</th><th>결과</th><th>실패원인</th><th>격추</th><th>돌파</th><th>경과(s)</th></tr></thead>
+        <thead><tr><th>#</th><th>난이도</th><th>결과</th><th>실패</th><th>격추</th><th>돌파</th><th>경과(s)</th></tr></thead>
         <tbody id="logBody"></tbody>
       </table>
     </div>
@@ -242,8 +242,8 @@
   var GOAL_SCORE = 10;
   var MAX_MISS = 3;
   var ROUND_MS = 30000;
-  var SPAWN_MS = 750; 
-  var SHIP_SPEED = 500; // px/s (기존 320에서 상향)
+  var SPAWN_MS = 750;
+  var SHIP_SPEED = 490; // px/s (기존 320에서 상향)
   var BULLET_SPEED = 620; // px/s
 
   var DIFFICULTY_MS = { normal: 2200, hard: 1400 };
@@ -398,7 +398,7 @@
     }
 
     if(remainMs <= 0){ endRound(score >= GOAL_SCORE ? "clear" : "over", "시간 초과"); return; }
-    if(misses >= MAX_MISS){ endRound("over", "실수 3회"); return; }
+    if(misses >= MAX_MISS){ endRound("over", "돌파 3회"); return; }
     if(score >= GOAL_SCORE){ endRound("clear"); return; }
 
     rafId = requestAnimationFrame(loop);
@@ -539,12 +539,12 @@
       var min = Math.min.apply(null, scores), max = Math.max.apply(null, scores);
       var med = median(scores);
       var timeoutCount = list.filter(function(r){ return r.reason === "시간 초과"; }).length;
-      var missCount = list.filter(function(r){ return r.reason === "실수 3회"; }).length;
+      var missCount = list.filter(function(r){ return r.reason === "돌파 3회"; }).length;
       var clearCount = list.filter(function(r){ return r.result === "클리어"; }).length;
       var countLabel = list.length + "회";
       html += '<div class="card"><h4>' + name + ' (' + countLabel + ')</h4>' +
         '<div class="row">점수 범위 <b>' + min + ' ~ ' + max + '</b> · 중앙값 <b>' + med + '</b></div>' +
-        '<div class="row">클리어 <b>' + clearCount + '</b> · 실수3회 <b>' + missCount + '</b> · 시간초과 <b>' + timeoutCount + '</b></div>' +
+        '<div class="row">클리어 <b>' + clearCount + '</b> · 돌파3회 <b>' + missCount + '</b> · 시간초과 <b>' + timeoutCount + '</b></div>' +
         '</div>';
     });
     document.getElementById("summary").innerHTML = html;
@@ -564,7 +564,7 @@
   }
   el.btnClearLog.addEventListener("click", function(){ data.history = []; saveData(); renderLog(); });
   el.btnCopy.addEventListener("click", function(){
-    var lines = ["#\t난이도\t결과\t실패원인\t격추\t돌파\t경과(s)"];
+    var lines = ["#\t난이도\t결과\t실패\t격추\t돌파\t경과(s)"];
     data.history.forEach(function(r, idx){
       lines.push([data.history.length-idx, difficultyLabel(r.difficulty), r.result, (r.reason||"-"), r.score, r.misses, r.elapsed.toFixed(1)].join("\t"));
     });
