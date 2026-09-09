@@ -157,7 +157,7 @@
 
   <div class="log">
     <h3>플레이 기록</h3>
-    <p class="meta">난이도(일반/어려움)별로 기록되어 비교가 가능합니다.<br>새로고침해도 기록은 남고, 새 라운드를 시작해도 기록표는 지워지지 않습니다.</p>
+    <p class="meta">난이도(일반/어려움)별로 10회씩 기록해서 비교하세요.<br>새로고침해도 기록은 남고, 새 라운드를 시작해도 기록표는 지워지지 않습니다.</p>
     <div class="summary" id="summary"></div>
     <div class="log-scroll">
       <table>
@@ -243,7 +243,7 @@
   var MAX_MISS = 3;
   var ROUND_MS = 30000;
   var SPAWN_MS = 750;
-  var SHIP_SPEED = 550; // px/s (기존 320에서 상향)
+  var SHIP_SPEED = 480; // px/s (기존 320에서 상향)
   var BULLET_SPEED = 620; // px/s
 
   var DIFFICULTY_MS = { normal: 2200, hard: 1400 };
@@ -398,8 +398,8 @@
     }
 
     if(remainMs <= 0){ endRound(score >= GOAL_SCORE ? "clear" : "over", "시간 초과"); return; }
-    if(score >= GOAL_SCORE){ endRound("clear"); return; }
     if(misses >= MAX_MISS){ endRound("over", "실수 3회"); return; }
+    if(score >= GOAL_SCORE){ endRound("clear"); return; }
 
     rafId = requestAnimationFrame(loop);
   }
